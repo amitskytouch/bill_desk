@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "197369607854",
+    "project_id": "bill-desk-d862c",
+    "storage_bucket": "bill-desk-d862c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197369607854:android:68536d9ddcb354fdc39f3f",
+        "android_client_info": {
+          "package_name": "com.example.bill_desk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "197369607854-fniusftbb2c6cb0gn1v8fqa2v04dubv3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDT9Lw1Q6sO_GSnyeDICM56y2A0Y4WWios"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197369607854-fniusftbb2c6cb0gn1v8fqa2v04dubv3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
