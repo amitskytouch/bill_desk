@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:bill_desk/Models/category_model.dart';
 import 'package:bill_desk/Models/new_order_model.dart';
 import 'package:bill_desk/Widgets/custom_snackbar.dart';
@@ -61,7 +60,6 @@ class EditOrderProvider extends ChangeNotifier {
 
   getProductStock(int index) async {
     for (var i = 0; i < productData[index].product.length; i++) {
-      log("${productData[index].product[i].productId}");
       await FirebaseFirestore.instance
           .collection("product")
           .where("id", isEqualTo: productData[index].product[i].productId)

@@ -57,7 +57,7 @@ class AcceptOrderProvider extends ChangeNotifier {
 
   addNewEmptyProduct(int index) {
     addCategoryList[index].product.add(Product(
-        name: "", qty: 0, total: 0, searchController: TextEditingController()));
+        name: "", qty: 0, price: 0, searchController: TextEditingController()));
   }
 
   filterCategory() {
@@ -87,7 +87,7 @@ class AcceptOrderProvider extends ChangeNotifier {
         .get()
         .then((value) {
       count = value.docs[0]["billNo"];
-      // docId = value.docs[0]["id"];
+     
     });
     notifyListeners();
   }
@@ -173,11 +173,11 @@ class AcceptOrderProvider extends ChangeNotifier {
           addCategoryList[index].product[subIndex].qty! + 1;
       addCategoryList[index].product[subIndex].updateStock =
           addCategoryList[index].product[subIndex].updateStock! - 1;
-      addCategoryList[index].product[subIndex].updatePrice =
-          addCategoryList[index].product[subIndex].updatePrice! +
-              addCategoryList[index].product[subIndex].total!;
+      addCategoryList[index].product[subIndex].totalPrice =
+          addCategoryList[index].product[subIndex].totalPrice! +
+              addCategoryList[index].product[subIndex].price!;
       totalAmount =
-          totalAmount + addCategoryList[index].product[subIndex].total!;
+          totalAmount + addCategoryList[index].product[subIndex].price!;
     } else {
       customSnackBar(context,
           color: Colors.red, message: "No More Stock Available");
@@ -192,11 +192,11 @@ class AcceptOrderProvider extends ChangeNotifier {
       addCategoryList[index].product[subIndex].updateStock ==
           addCategoryList[index].product[subIndex].updateStock! + 1;
 
-      addCategoryList[index].product[subIndex].updatePrice =
-          addCategoryList[index].product[subIndex].updatePrice! -
-              addCategoryList[index].product[subIndex].total!;
+      addCategoryList[index].product[subIndex].totalPrice =
+          addCategoryList[index].product[subIndex].totalPrice! -
+              addCategoryList[index].product[subIndex].price!;
       totalAmount =
-          totalAmount - addCategoryList[index].product[subIndex].total!;
+          totalAmount - addCategoryList[index].product[subIndex].price!;
     }
     if (addCategoryList[index].product[subIndex].qty == 0) {
       productController.removeAt(index);
@@ -212,10 +212,10 @@ class AcceptOrderProvider extends ChangeNotifier {
         .where("product_name", isEqualTo: name)
         .get()
         .then((value) {
-      addCategoryList[index].product[subIndex].total =
+      addCategoryList[index].product[subIndex].price =
           int.parse(value.docs[0]["product_price"]);
       addCategoryList[index].product[subIndex].qty = 0;
-      addCategoryList[index].product[subIndex].updatePrice = 0;
+      addCategoryList[index].product[subIndex].totalPrice = 0;
       addCategoryList[index].product[subIndex].productId = value.docs[0]["id"];
       addCategoryList[index].product[subIndex].productStock =
           int.parse(value.docs[0]["stock"]);
@@ -272,9 +272,9 @@ class Product {
   String? productId;
   int? qty;
   int? productStock;
-  int? total;
+  int? price;
   int? updateStock;
-  double? updatePrice;
+  double? totalPrice;
   TextEditingController? searchController;
 
   Product(
@@ -282,9 +282,9 @@ class Product {
       this.productId,
       this.productStock,
       this.qty,
-      this.total,
+      this.price,
       this.updateStock,
-      this.updatePrice,
+      this.totalPrice,
       this.searchController});
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
@@ -292,15 +292,15 @@ class Product {
         productId: json["productId"],
         qty: json["qty"],
         productStock: json["productStock"],
-        total: json["total"],
+        price: json["total"],
         updateStock: json["updateStock"],
-        updatePrice: json["updatePrice"],
+        totalPrice: json["updatePrice"],
         searchController: TextEditingController(),
       );
 
   Map<String, dynamic> toJson() => {
         "name": name,
         "qty": qty,
-        "total": total,
+        "total": price,
       };
 }

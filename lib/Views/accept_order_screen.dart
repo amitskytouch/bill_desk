@@ -1,4 +1,3 @@
-
 import 'package:bill_desk/Constants/color_const.dart';
 import 'package:bill_desk/Constants/textstyle_const.dart';
 import 'package:bill_desk/FirebaseServices/order_services.dart';
@@ -54,7 +53,14 @@ class _AcceptOrderScreenState extends State<AcceptOrderScreen> {
       List<newordermodel.AddCategoryItemModel> myData = [];
       for (var i = 0; i < provider.addCategoryList.length; i++) {
         List<Product> productList = provider.addCategoryList[i].product
-            .where((element) => element.productId != null)
+            .where(
+              (element) =>
+                  element.productId != null &&
+                  element.qty != null &&
+                  element.qty! > 0 &&
+                  element.name != null &&
+                  element.name != "",
+            )
             .toList();
 
         if (productList.isNotEmpty) {
@@ -68,8 +74,8 @@ class _AcceptOrderScreenState extends State<AcceptOrderScreen> {
                         productName: e.name,
                         productId: e.productId,
                         quantity: e.qty,
-                        price: e.total!.toDouble(),
-                        totalPrice: e.updatePrice,
+                        price: e.price!.toDouble(),
+                        totalPrice: e.totalPrice,
                         productStock: e.productStock,
                         updatedStock: e.updateStock,
                       ))
@@ -549,7 +555,7 @@ class _AcceptOrderScreenState extends State<AcceptOrderScreen> {
                                                                       index]
                                                                   .product[
                                                                       subIndex]
-                                                                  .updatePrice
+                                                                  .totalPrice
                                                                   .toString(),
                                                               overflow:
                                                                   TextOverflow

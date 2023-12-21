@@ -40,6 +40,7 @@ class _OrderEditScreenState extends State<OrderEditScreen> {
       List<Products> productList = provider.productData[i].product
           .where(
             (element) =>
+                element.productId != null&&
                 element.quantity != null &&
                 element.quantity! > 0 &&
                 element.productName != null &&
