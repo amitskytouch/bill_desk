@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:bill_desk/Models/category_model.dart';
 import 'package:bill_desk/Models/customer_model.dart';
 import 'package:bill_desk/Models/product_model.dart';
