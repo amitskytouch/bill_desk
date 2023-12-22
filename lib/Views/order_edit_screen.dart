@@ -140,9 +140,8 @@ class _OrderEditScreenState extends State<OrderEditScreen> {
     DateTime temp =
         intl.DateFormat("dd-MM-yyyy").parse(orders!.orderDate.toString());
     providerEditOrder.selectedDate = temp;
-
-    providerEditOrder.addValueToController(orders!);
     providerEditOrder.getCategory();
+    providerEditOrder.addValueToController(orders!);
     super.initState();
   }
 

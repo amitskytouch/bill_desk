@@ -152,7 +152,9 @@ class AcceptOrderProvider extends ChangeNotifier {
       if (value.docs.isNotEmpty) {
         for (var i = 0; i < value.docs.length; i++) {
           ProductModel newModel = ProductModel.fromMap(value.docs[i].data());
-          temp.add(newModel);
+          if (int.parse(newModel.stock.toString()) > 0) {
+            temp.add(newModel);
+          }
         }
       }
     });
@@ -230,9 +232,7 @@ class AcceptOrderProvider extends ChangeNotifier {
       addCategoryList[index].product[subIndex].productStock =
           int.parse(value.docs[0]["stock"]);
       addCategoryList[index].product[subIndex].updateStock =
-          int.parse(value.docs[0]["stock"]) > 0
-              ? int.parse(value.docs[0]["stock"]) - 1
-              : 0;
+          int.parse(value.docs[0]["stock"]) - 1;
       totalAmount =
           totalAmount + addCategoryList[index].product[subIndex].price!;
     });

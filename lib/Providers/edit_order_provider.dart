@@ -47,6 +47,7 @@ class EditOrderProvider extends ChangeNotifier {
             productData.indexWhere((emt) => emt.category == element.category) ==
             -1)
         .toList();
+    notifyListeners();
   }
 
   filterProduct(int i) {
@@ -85,6 +86,7 @@ class EditOrderProvider extends ChangeNotifier {
     });
     categoryList = temp;
     categoryMainList = temp;
+    filterCategory();
     notifyListeners();
   }
 
@@ -146,10 +148,9 @@ class EditOrderProvider extends ChangeNotifier {
       productData[index].product[subIndex].productStock =
           int.parse(value.docs[0]["stock"]);
       productData[index].product[subIndex].updatedStock =
-          int.parse(value.docs[0]["stock"]) > 0
-              ? int.parse(value.docs[0]["stock"]) - 1
-              : 0;
-      totalAmount = totalAmount + productData[index].product[subIndex].price!;
+          int.parse(value.docs[0]["stock"]) - 1;
+
+      totalAmount = totalAmount + double.parse(value.docs[0]["product_price"]);
     });
 
     notifyListeners();
@@ -165,7 +166,9 @@ class EditOrderProvider extends ChangeNotifier {
       if (value.docs.isNotEmpty) {
         for (var i = 0; i < value.docs.length; i++) {
           ProductModel newModel = ProductModel.fromMap(value.docs[i].data());
-          temp.add(newModel);
+          if (int.parse(newModel.stock.toString()) > 0) {
+            temp.add(newModel);
+          }
         }
       }
     });
