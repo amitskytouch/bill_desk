@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:bill_desk/Constants/color_const.dart';
 import 'package:bill_desk/Constants/textstyle_const.dart';
