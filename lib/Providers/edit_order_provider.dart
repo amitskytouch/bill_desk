@@ -15,10 +15,12 @@ class EditOrderProvider extends ChangeNotifier {
   List<AddCategoryItemModel> productData = [];
   List<CategoryModel> categoryList = [];
   List<CategoryModel> categoryMainList = [];
+  List<Products> dummyList = [];
   bool isLoading = true;
 
   addValueToController(NewOrdersModel orders) async {
     productData.clear();
+    dummyList.clear();
     isLoading = true;
     totalAmount = double.parse(orders.orderAmount.toString());
 
@@ -137,13 +139,17 @@ class EditOrderProvider extends ChangeNotifier {
         .then((value) {
       productData[index].product[subIndex].price =
           double.parse(value.docs[0]["product_price"]);
-      productData[index].product[subIndex].quantity = 0;
-      productData[index].product[subIndex].totalPrice = 0;
+      productData[index].product[subIndex].quantity = 1;
+      productData[index].product[subIndex].totalPrice =
+          double.parse(value.docs[0]["product_price"]);
       productData[index].product[subIndex].productId = value.docs[0]["id"];
       productData[index].product[subIndex].productStock =
           int.parse(value.docs[0]["stock"]);
       productData[index].product[subIndex].updatedStock =
-          int.parse(value.docs[0]["stock"]);
+          int.parse(value.docs[0]["stock"]) > 0
+              ? int.parse(value.docs[0]["stock"]) - 1
+              : 0;
+      totalAmount = totalAmount + productData[index].product[subIndex].price!;
     });
 
     notifyListeners();
@@ -170,8 +176,7 @@ class EditOrderProvider extends ChangeNotifier {
   }
 
   increaseQuantity(int index, int subIndex, BuildContext context) {
-    if (productData[index].product[subIndex].quantity! <
-        productData[index].product[subIndex].updatedStock!) {
+    if (productData[index].product[subIndex].updatedStock! > 0) {
       productData[index].product[subIndex].quantity =
           productData[index].product[subIndex].quantity! + 1;
       productData[index].product[subIndex].updatedStock =
@@ -188,14 +193,6 @@ class EditOrderProvider extends ChangeNotifier {
   }
 
   decreaseQuantity(int index, int subIndex) async {
-    // if (data[index]["quantity"] > 0) {
-    //   data[index]["quantity"]--;
-    //   data[index]["updatedStock"]++;
-    //   data[index]["updatedPrice"] =
-    //       data[index]["updatedPrice"] - data[index]["price"];
-    //   totalAmount = totalAmount - data[index]["price"];
-    // }
-
     if (productData[index].product[subIndex].quantity! > 0) {
       productData[index].product[subIndex].quantity =
           productData[index].product[subIndex].quantity! - 1;
@@ -208,13 +205,28 @@ class EditOrderProvider extends ChangeNotifier {
     }
 
     if (productData[index].product[subIndex].quantity! == 0) {
-      await FirebaseFirestore.instance
-          .collection("product")
-          .doc(productData[index].product[subIndex].productId)
-          .update({
-        "stock": productData[index].product[subIndex].updatedStock.toString(),
-      });
+      dummyList.add(productData[index].product[subIndex]);
+      String productName =
+          productData[index].product[subIndex].productName.toString();
       productData[index].product.removeAt(subIndex);
+      getRemovedProduct(
+          index, productData[index].category.toString(), productName);
+    }
+    notifyListeners();
+  }
+
+  getRemovedProduct(int index, String category, String productName) async {
+    await FirebaseFirestore.instance
+        .collection("product")
+        .where("category", isEqualTo: category)
+        .where("product_name", isEqualTo: productName)
+        .get()
+        .then((value) => productData[index]
+            .productList!
+            .add(ProductModel.fromMap(value.docs[0].data())));
+    if (productData[index].product.length ==
+        productData[index].productList?.length) {
+      addNewEmptyProduct(index);
     }
     notifyListeners();
   }

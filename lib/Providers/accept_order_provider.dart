@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:bill_desk/Models/category_model.dart';
 import 'package:bill_desk/Models/customer_model.dart';
 import 'package:bill_desk/Models/product_model.dart';
@@ -11,7 +12,6 @@ class AcceptOrderProvider extends ChangeNotifier {
   List<CategoryModel> categoryList = [];
   List<CategoryModel> categoryMainList = [];
   List<AddCategoryItemModel> addCategoryList = [];
-  List<TextEditingController> productController = [];
   double totalAmount = 0;
   DateTime selectedDate = DateTime.now();
   int count = 0;
@@ -87,7 +87,6 @@ class AcceptOrderProvider extends ChangeNotifier {
         .get()
         .then((value) {
       count = value.docs[0]["billNo"];
-     
     });
     notifyListeners();
   }
@@ -139,7 +138,7 @@ class AcceptOrderProvider extends ChangeNotifier {
 
   disposeData() {
     selectedDate = DateTime.now();
-    productController.clear();
+    // productController.clear();
     totalAmount = 0;
   }
 
@@ -151,15 +150,10 @@ class AcceptOrderProvider extends ChangeNotifier {
         .get()
         .then((value) {
       if (value.docs.isNotEmpty) {
-        productController.isEmpty
-            ? productController.add(TextEditingController())
-            : null;
         for (var i = 0; i < value.docs.length; i++) {
           ProductModel newModel = ProductModel.fromMap(value.docs[i].data());
           temp.add(newModel);
         }
-      } else {
-        productController.clear();
       }
     });
     addCategoryList[index].productList = temp;
@@ -189,9 +183,8 @@ class AcceptOrderProvider extends ChangeNotifier {
     if (addCategoryList[index].product[subIndex].qty! > 0) {
       addCategoryList[index].product[subIndex].qty =
           addCategoryList[index].product[subIndex].qty! - 1;
-      addCategoryList[index].product[subIndex].updateStock ==
+      addCategoryList[index].product[subIndex].updateStock =
           addCategoryList[index].product[subIndex].updateStock! + 1;
-
       addCategoryList[index].product[subIndex].totalPrice =
           addCategoryList[index].product[subIndex].totalPrice! -
               addCategoryList[index].product[subIndex].price!;
@@ -199,9 +192,25 @@ class AcceptOrderProvider extends ChangeNotifier {
           totalAmount - addCategoryList[index].product[subIndex].price!;
     }
     if (addCategoryList[index].product[subIndex].qty == 0) {
-      productController.removeAt(index);
+      String productName =
+          addCategoryList[index].product[subIndex].name.toString();
       addCategoryList[index].product.removeAt(subIndex);
+      getRemovedProduct(
+          index, addCategoryList[index].category.toString(), productName);
     }
+
+    notifyListeners();
+  }
+
+  getRemovedProduct(int index, String category, String productName) async {
+    await FirebaseFirestore.instance
+        .collection("product")
+        .where("category", isEqualTo: category)
+        .where("product_name", isEqualTo: productName)
+        .get()
+        .then((value) => addCategoryList[index]
+            .productList
+            .add(ProductModel.fromMap(value.docs[0].data())));
 
     notifyListeners();
   }
@@ -213,14 +222,19 @@ class AcceptOrderProvider extends ChangeNotifier {
         .get()
         .then((value) {
       addCategoryList[index].product[subIndex].price =
-          int.parse(value.docs[0]["product_price"]);
-      addCategoryList[index].product[subIndex].qty = 0;
-      addCategoryList[index].product[subIndex].totalPrice = 0;
+          double.parse(value.docs[0]["product_price"]);
+      addCategoryList[index].product[subIndex].qty = 1;
+      addCategoryList[index].product[subIndex].totalPrice =
+          double.parse(value.docs[0]["product_price"]);
       addCategoryList[index].product[subIndex].productId = value.docs[0]["id"];
       addCategoryList[index].product[subIndex].productStock =
           int.parse(value.docs[0]["stock"]);
       addCategoryList[index].product[subIndex].updateStock =
-          int.parse(value.docs[0]["stock"]);
+          int.parse(value.docs[0]["stock"]) > 0
+              ? int.parse(value.docs[0]["stock"]) - 1
+              : 0;
+      totalAmount =
+          totalAmount + addCategoryList[index].product[subIndex].price!;
     });
 
     notifyListeners();
@@ -272,7 +286,7 @@ class Product {
   String? productId;
   int? qty;
   int? productStock;
-  int? price;
+  double? price;
   int? updateStock;
   double? totalPrice;
   TextEditingController? searchController;

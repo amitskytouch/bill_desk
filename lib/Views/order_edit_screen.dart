@@ -40,7 +40,7 @@ class _OrderEditScreenState extends State<OrderEditScreen> {
       List<Products> productList = provider.productData[i].product
           .where(
             (element) =>
-                element.productId != null&&
+                element.productId != null &&
                 element.quantity != null &&
                 element.quantity! > 0 &&
                 element.productName != null &&
@@ -92,6 +92,16 @@ class _OrderEditScreenState extends State<OrderEditScreen> {
                   provider.productData[i].product[j].updatedStock.toString(),
             });
           }
+        }
+      }
+      if (provider.dummyList.isNotEmpty) {
+        for (int i = 0; i < provider.dummyList.length; i++) {
+          await FirebaseFirestore.instance
+              .collection("product")
+              .doc(provider.dummyList[i].productId.toString())
+              .update({
+            "stock": provider.dummyList[i].updatedStock.toString(),
+          });
         }
       }
     }
