@@ -10,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
-
 class BottomNavBarScreen extends StatefulWidget {
   const BottomNavBarScreen({super.key});
 
@@ -40,13 +38,18 @@ class _BottomNavBarScreenState extends State<BottomNavBarScreen> {
       child: SafeArea(
         child: Scaffold(
           bottomNavigationBar: Container(
-            margin: const EdgeInsets.only(left: 10, right: 10,),
+            margin: const EdgeInsets.only(
+              left: 10,
+              right: 10,
+            ),
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
               border: Border.all(color: purpleColor),
             ),
             child: ClipRRect(
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
               child: BottomNavigationBar(
                 backgroundColor: whiteColor,
                 type: BottomNavigationBarType.fixed,
