@@ -1,4 +1,3 @@
-
 import 'package:bill_desk/Constants/color_const.dart';
 import 'package:bill_desk/Constants/textstyle_const.dart';
 import 'package:bill_desk/FirebaseServices/order_services.dart';
@@ -371,19 +370,31 @@ class _AcceptOrderScreenState extends State<AcceptOrderScreen> {
                                                       .name!
                                                   : "${appLocale?.selectProduct}"),
                                               onChanged: (value) {
-                                                setState(() {
-                                                  provider
-                                                      .addCategoryList[index]
-                                                      .product[subIndex]
-                                                      .name = value.toString();
-                                                });
+                                                provider
+                                                    .addCategoryList[index]
+                                                    .product[subIndex]
+                                                    .name = value.toString();
+
                                                 provider.getPrice(
                                                     value.toString(),
                                                     index,
                                                     subIndex);
                                                 provider.filterProduct(index);
-                                                provider
-                                                    .addNewEmptyProduct(index);
+                                                Future.delayed(
+                                                    Duration(milliseconds: 500),
+                                                    () {
+                                                  if (provider
+                                                          .addCategoryList[
+                                                              index]
+                                                          .product
+                                                          .last
+                                                          .name !=
+                                                      "") {
+                                                    provider.addNewEmptyProduct(
+                                                        index);
+                                                  }
+                                                  setState(() {});
+                                                });
                                               },
                                               buttonStyleData: ButtonStyleData(
                                                 elevation: 0,
@@ -507,42 +518,6 @@ class _AcceptOrderScreenState extends State<AcceptOrderScreen> {
                                                         ),
                                                       ),
                                                       const SizedBox(width: 5),
-                                                      // IconButton(
-                                                      //   padding:
-                                                      //       EdgeInsets.zero,
-                                                      //   constraints:
-                                                      //       const BoxConstraints(),
-                                                      //   onPressed: () {
-                                                      //     provider
-                                                      //         .decreaseQuantity(
-                                                      //             index,
-                                                      //             subIndex);
-                                                      //   },
-                                                      //   icon: const Icon(
-                                                      //     Icons
-                                                      //         .remove_circle_outline,
-                                                      //     size: 20,
-                                                      //   ),
-                                                      // ),
-
-                                                      // IconButton(
-                                                      //   padding:
-                                                      //       EdgeInsets.zero,
-                                                      //   constraints:
-                                                      //       const BoxConstraints(),
-                                                      //   onPressed: () {
-                                                      //     provider
-                                                      //         .increaseQuantity(
-                                                      //             index,
-                                                      //             context,
-                                                      //             subIndex);
-                                                      //   },
-                                                      //   icon: const Icon(
-                                                      //     Icons
-                                                      //         .add_circle_outline,
-                                                      //     size: 20,
-                                                      //   ),
-                                                      // ),
                                                       const Spacer(),
                                                       provider
                                                                   .addCategoryList[

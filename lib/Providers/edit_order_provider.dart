@@ -68,10 +68,12 @@ class EditOrderProvider extends ChangeNotifier {
           .where("id", isEqualTo: productData[index].product[i].productId)
           .get()
           .then((value) {
-        productData[index].product[i].productStock =
-            int.parse(value.docs[0]["stock"]);
-        productData[index].product[i].updatedStock =
-            int.parse(value.docs[0]["stock"]);
+        if (value.docs.isNotEmpty) {
+          productData[index].product[i].productStock =
+              int.parse(value.docs[0]["stock"]);
+          productData[index].product[i].updatedStock =
+              int.parse(value.docs[0]["stock"]);
+        }
       });
     }
   }
@@ -134,6 +136,10 @@ class EditOrderProvider extends ChangeNotifier {
   }
 
   getPrice(String name, int index, int subIndex) async {
+    if (subIndex != (productData[index].product.length - 1)) {
+      totalAmount =
+          totalAmount - productData[index].product[subIndex].totalPrice!;
+    }
     await FirebaseFirestore.instance
         .collection("product")
         .where("product_name", isEqualTo: name)

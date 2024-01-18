@@ -1,4 +1,4 @@
-class ProductModel {
+class   ProductModel {
   String? id;
   String? productName;
   String? productPrice;

@@ -70,7 +70,7 @@ class AcceptOrderProvider extends ChangeNotifier {
 
   filterProduct(int i) {
     addCategoryList[i].productList = addCategoryList[i]
-        .productList
+        .productMainList!
         .where((element) =>
             addCategoryList[i]
                 .product
@@ -158,6 +158,8 @@ class AcceptOrderProvider extends ChangeNotifier {
       }
     });
     addCategoryList[index].productList = temp;
+    addCategoryList[index].productMainList = temp;
+
     notifyListeners();
   }
 
@@ -217,6 +219,10 @@ class AcceptOrderProvider extends ChangeNotifier {
   }
 
   getPrice(String name, int index, int subIndex) async {
+    if (subIndex != (addCategoryList[index].product.length - 1)) {
+      totalAmount =
+          totalAmount - addCategoryList[index].product[subIndex].totalPrice!;
+    }
     await FirebaseFirestore.instance
         .collection("product")
         .where("product_name", isEqualTo: name)
@@ -232,6 +238,7 @@ class AcceptOrderProvider extends ChangeNotifier {
           int.parse(value.docs[0]["stock"]);
       addCategoryList[index].product[subIndex].updateStock =
           int.parse(value.docs[0]["stock"]) - 1;
+
       totalAmount =
           totalAmount + addCategoryList[index].product[subIndex].price!;
     });
@@ -251,6 +258,7 @@ class AddCategoryItemModel {
   String? categoryId;
   List<Product> product;
   List<ProductModel> productList;
+  List<ProductModel>? productMainList;
 
   AddCategoryItemModel({
     required this.category,

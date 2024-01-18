@@ -392,9 +392,17 @@ class _OrderEditScreenState extends State<OrderEditScreen> {
                                                         provider.filterProduct(
                                                             index);
                                                         if (provider
-                                                            .productData[index]
-                                                            .productList!
-                                                            .isNotEmpty) {
+                                                                .productData[
+                                                                    index]
+                                                                .productList!
+                                                                .isNotEmpty &&
+                                                            provider
+                                                                    .productData[
+                                                                        index]
+                                                                    .product
+                                                                    .last
+                                                                    .productName !=
+                                                                "") {
                                                           provider
                                                               .addNewEmptyProduct(
                                                                   index);
@@ -498,24 +506,6 @@ class _OrderEditScreenState extends State<OrderEditScreen> {
                                                           ),
                                                           child: Row(
                                                             children: [
-                                                              // IconButton(
-                                                              //   padding:
-                                                              //       EdgeInsets
-                                                              //           .zero,
-                                                              //   constraints:
-                                                              //       const BoxConstraints(),
-                                                              //   onPressed: () {
-                                                              //     provider.decreaseQuantity(
-                                                              //         index,
-                                                              //         subIndex);
-                                                              //   },
-                                                              //   icon:
-                                                              //       const Icon(
-                                                              //     Icons
-                                                              //         .remove_circle_outline,
-                                                              //     size: 20,
-                                                              //   ),
-                                                              // ),
                                                               GestureDetector(
                                                                 onTap: () {
                                                                   provider.decreaseQuantity(
@@ -565,28 +555,6 @@ class _OrderEditScreenState extends State<OrderEditScreen> {
                                                               ),
                                                               const SizedBox(
                                                                   width: 5),
-
-                                                              // IconButton(
-                                                              //   padding:
-                                                              //       EdgeInsets
-                                                              //           .zero,
-                                                              //   constraints:
-                                                              //       const BoxConstraints(),
-                                                              //   onPressed: () {
-                                                              //     provider
-                                                              //         .increaseQuantity(
-                                                              //       index,
-                                                              //       subIndex,
-                                                              //       context,
-                                                              //     );
-                                                              //   },
-                                                              //   icon:
-                                                              //       const Icon(
-                                                              //     Icons
-                                                              //         .add_circle_outline,
-                                                              //     size: 20,
-                                                              //   ),
-                                                              // ),
                                                               const Spacer(),
                                                               provider
                                                                           .productData[
