@@ -281,6 +281,9 @@ class _AcceptOrderScreenState extends State<AcceptOrderScreen> {
                                               TextButton(
                                                 onPressed: () {
                                                   Navigator.pop(context, 'ok');
+                                                  provider
+                                                      .changePriceWhenChangeCategory(
+                                                          index);
                                                   selectedCategory =
                                                       value.toString();
                                                   provider.setCategory(

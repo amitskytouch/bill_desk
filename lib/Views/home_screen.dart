@@ -162,21 +162,44 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       SizedBox(
                         width: 110,
-                        child: RichText(
-                          overflow: TextOverflow.ellipsis,
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "${appLocale?.stock}  ",
-                                style: customTextStyle(color: greyColor),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RichText(
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "${appLocale?.products}  ",
+                                    style: customTextStyle(color: greyColor),
+                                  ),
+                                  TextSpan(
+                                    text: "${provider.itemCount}",
+                                    style: customTextStyle(
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
                               ),
-                              TextSpan(
-                                text: "${provider.totalStock}",
-                                style: customTextStyle(
-                                    fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 5),
+                            RichText(
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "${appLocale?.stock}  ",
+                                    style: customTextStyle(color: greyColor),
+                                  ),
+                                  TextSpan(
+                                    text: "${provider.totalStock}",
+                                    style: customTextStyle(
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ],

@@ -270,6 +270,9 @@ class _OrderEditScreenState extends State<OrderEditScreen> {
                                                         onPressed: () {
                                                           Navigator.pop(
                                                               context, 'ok');
+                                                          provider
+                                                              .changePriceWhenChangeCategory(
+                                                                  index);
                                                           selectedCategory =
                                                               value.toString();
                                                           provider.setCategory(

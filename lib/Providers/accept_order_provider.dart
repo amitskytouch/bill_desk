@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:bill_desk/Models/category_model.dart';
 import 'package:bill_desk/Models/customer_model.dart';
 import 'package:bill_desk/Models/product_model.dart';
@@ -66,6 +67,18 @@ class AcceptOrderProvider extends ChangeNotifier {
                 .indexWhere((emt) => emt.category == element.category) ==
             -1)
         .toList();
+  }
+
+  changePriceWhenChangeCategory(int index) {
+    for (int i = 0; i < addCategoryList[index].product.length; i++) {
+      log(i.toString());
+      log("=======> Total Price ${addCategoryList[index].product[i].totalPrice}");
+      if (addCategoryList[index].product[i].totalPrice != null) {
+        totalAmount = totalAmount -
+            addCategoryList[index].product[i].totalPrice!.toDouble();
+      }
+    }
+    notifyListeners();
   }
 
   filterProduct(int i) {
@@ -137,7 +150,6 @@ class AcceptOrderProvider extends ChangeNotifier {
 
   disposeData() {
     selectedDate = DateTime.now();
-    // productController.clear();
     totalAmount = 0;
   }
 

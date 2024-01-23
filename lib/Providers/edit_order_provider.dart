@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bill_desk/Models/category_model.dart';
 import 'package:bill_desk/Models/new_order_model.dart';
 import 'package:bill_desk/Widgets/custom_snackbar.dart';
@@ -47,6 +49,18 @@ class EditOrderProvider extends ChangeNotifier {
             productData.indexWhere((emt) => emt.category == element.category) ==
             -1)
         .toList();
+    notifyListeners();
+  }
+
+  changePriceWhenChangeCategory(int index) {
+    for (int i = 0; i < productData[index].product.length; i++) {
+      log(i.toString());
+      log("=======> Total Price ${productData[index].product[i].totalPrice}");
+      if (productData[index].product[i].totalPrice != null) {
+        totalAmount =
+            totalAmount - productData[index].product[i].totalPrice!.toDouble();
+      }
+    }
     notifyListeners();
   }
 
